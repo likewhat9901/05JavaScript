@@ -21,12 +21,12 @@
     // java의 확장for문과 비슷하게 배열에 저장된 값을 순서대로 인출
     console.error("for~of로 반복")
     for (const v of myArray) {
-      // 따라서 값에 접근하려면 배열기호를 통해 인덱스를 사용해야 한다.
       console.log(v);
     }
-
+    
     console.error("for~in으로 반복")
     for (const i in myArray) {
+      // 값에 접근하려면 배열기호를 통해 인덱스를 사용해야 한다.
       console.log(i, myArray[i]);
     }
   </script>
