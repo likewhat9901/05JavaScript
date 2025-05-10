@@ -43,51 +43,125 @@
       const screen = document.getElementById("screen");
       // 계산식 저장 Str
       let CalculStr = "";
+      let screenStr = "";
 
-      /* 숫자, 연산자 버튼 */
-      // input버튼 DOM을 가져옴
-      const inputList = document.querySelectorAll(".inputBt");
-      // input버튼 함수 정의
-      let inputStr = function(obj){
-        // input 값 Str로 저장.
-        let inputValue = obj.dataset.value;
-        CalculStr += inputValue;
-        // screen에 띄우기
-        screen.textContent = CalculStr;
-        console.log(inputValue, CalculStr);
+      /* 숫자 버튼 */
+      const numBt_list = document.querySelectorAll(".numberBt");
+      const numBt_func = function(obj){
+        // if(screenStr!="") return;
+
+        // 내가 누른값 가져오기
+        const number = obj.dataset.value;
+
+        CalculStr += number;
+        screenStr += number;
+        // 보여주는건 숫자만
+        screen.textContent = screenStr;
+        console.log(CalculStr);
       };
       // click 이벤트 input버튼마다 적용
-      inputList.forEach(e => {
+      numBt_list.forEach(e => {
         e.addEventListener("click", function(){
-          inputStr(e);
+          numBt_func(e);
         });
       });
-      // = 버튼 
+
+      /* . 버튼 */
+      const dotBt = document.querySelector(".dotBt");
+      dotBt.addEventListener("click", function(e){
+        const dot = e.target.dataset.value;
+        const lastNumber = CalculStr.split(/[\+\-\*\/]/).pop();
+
+        if (lastNumber.includes(".")) return;
+
+        const lastStr = CalculStr.charAt(CalculStr.length - 1);
+        if (["+", "-", "*", "/", ""].includes(lastStr)) {
+          CalculStr += "0" + dot;
+          screenStr += "0" + dot;
+        } else {
+          CalculStr += dot;
+          screenStr += dot;
+        };
+
+        screen.textContent = screenStr;
+        console.log(CalculStr);
+      });
+
+      /* 연산자 버튼 */
+      const operator_list = document.querySelectorAll(".operatorBt");
+      const optBt_func = function(obj){
+        const operator = obj.dataset.value;
+
+        if(CalculStr == ""){
+            return;
+        }
+
+        const calculateBt_list = ["+", "-", "*", "/"];
+        const lastStr = CalculStr[CalculStr.length-1];
+
+        if(calculateBt_list.includes(lastStr)){
+            CalculStr = CalculStr.substring(0, CalculStr.length-1);
+            CalculStr += operator;
+            screenStr = "";
+            console.log(CalculStr);
+            return;
+        }
+        CalculStr += operator;
+        screenStr = "";
+        console.log(CalculStr);
+      }
+      operator_list.forEach(e => {
+        e.addEventListener("click", function(){
+          optBt_func(e);
+        });
+      });
+
+      /* = 버튼 */
       const resultBt = document.querySelector(".resultBt");
       resultBt.addEventListener("click", () => {
-        let result = eval(CalculStr);
-        
-        screen.textContent = result;
-        CalculStr = String(result);
+        let result;
+        try {
+          result = eval(CalculStr);
+
+          if(result == null){
+            screen.textContent = 0;
+            console.log(CalculStr);
+            return;
+          }
+          CalculStr = String(result);
+
+          screenStr = result.toFixed(4);
+          screen.textContent = screenStr;
+          console.log(CalculStr);
+        } catch (error) {
+          result = null;
+          console.log("result에러발생");
+        }
       });
 
       /* Backspace 버튼 */
       const backBt = document.querySelector(".backspace");
       backBt.addEventListener("click", ()=>{
-        if(CalculStr.length < 2){
-          CalculStr = "";
-          screen.textContent = 0;
+        if(screenStr.length <= 1){
+          reset();
           return;
         }
         CalculStr = CalculStr.substring(0, CalculStr.length-1);
-        screen.textContent = CalculStr;
+        screenStr = screenStr.substring(0, screenStr.length-1);
+        screen.textContent = screenStr;
+        console.log(CalculStr);
       })
+
       /* C 버튼 */
       const resetBt = document.querySelector(".reset");
-      resetBt.addEventListener("click", ()=>{
+      // 계산문자열, 스크린문자열, 스크린 0으로 만들기
+      function reset(){
         CalculStr = "";
+        screenStr = "";
         screen.textContent = 0;
-      })
+        console.log(CalculStr);
+      }
+      resetBt.addEventListener("click", reset);
 
     });
 
@@ -107,28 +181,28 @@
         <td colspan="2" class="reset">C</td>
       </tr>
       <tr>
-        <td class="inputBt" data-value="1">1</td>
-        <td class="inputBt" data-value="2">2</td>
-        <td class="inputBt" data-value="3">3</td>
-        <td class="inputBt" data-value="+">＋</td>
+        <td class="numberBt" data-value="1">1</td>
+        <td class="numberBt" data-value="2">2</td>
+        <td class="numberBt" data-value="3">3</td>
+        <td class="operatorBt" data-value="+">＋</td>
       </tr>
       <tr>
-        <td class="inputBt" data-value="4">4</td>
-        <td class="inputBt" data-value="5">5</td>
-        <td class="inputBt" data-value="6">6</td>
-        <td class="inputBt" data-value="-">－</td>
+        <td class="numberBt" data-value="4">4</td>
+        <td class="numberBt" data-value="5">5</td>
+        <td class="numberBt" data-value="6">6</td>
+        <td class="operatorBt" data-value="-">－</td>
       </tr>
       <tr>
-        <td class="inputBt" data-value="7">7</td>
-        <td class="inputBt" data-value="8">8</td>
-        <td class="inputBt" data-value="9">9</td>
-        <td class="inputBt" data-value="*">×</td>
+        <td class="numberBt" data-value="7">7</td>
+        <td class="numberBt" data-value="8">8</td>
+        <td class="numberBt" data-value="9">9</td>
+        <td class="operatorBt" data-value="*">×</td>
       </tr>
       <tr>
         <td class="resultBt">=</td>
-        <td class="inputBt" data-value="0">0</td>
-        <td class="inputBt" data-value=".">.</td>
-        <td class="inputBt" data-value="/">÷</td>
+        <td class="numberBt" data-value="0">0</td>
+        <td class="dotBt" data-value=".">.</td>
+        <td class="operatorBt" data-value="/">÷</td>
       </tr>
     </tbody>
   </table>
