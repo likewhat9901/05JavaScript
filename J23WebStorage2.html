@@ -14,16 +14,16 @@
     }
     // 스토리지 저장
     var save = function () {
-      if (key.value == "") {
+      if (key.value.trim() == "") {
         alert("키를 입력하세요"); key.focus();
         return;
       }
-      if (val.value == "") {
+      if (val.value.trim() == "") {
         alert("값를 입력하세요"); val.focus();
         return;
       }
       // 스토리지 저장 및 새로운 입력을 위해 입력상자의 내용을 지움
-      localStorage.setItem(key.value, val.value);
+      localStorage.setItem(key.value.trim(), val.value.trim());
       alert("로컬 스토리지에 저장됨.");
       key.value = "";
       val.value = "";
@@ -31,7 +31,7 @@
     }
     // Key를 이용해서 저장된 스토리지 조회
     var selectOne = function() {
-      if (key.value == "") {
+      if (key.value.trim() == "") {
         alert("조회할 키를 입력하세요"); key.focus();
         return;
       }

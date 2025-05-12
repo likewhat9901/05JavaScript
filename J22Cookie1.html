@@ -12,9 +12,12 @@
     var setCookie = function (name, value, exp){
       //유효기간 설정을 위해 Date 객체 생성
       var date = new Date();
-      console.log("1970-01-01부터 지금까지의 초(타임스탬프)", date.getTime());
+      // ms : 1초 => 1000ms
+      console.log("1970-01-01부터 지금까지의 밀리초(타임스탬프)", date.getTime());
       // 타임스탬프에 매개변수로 전달된 exp(날짜단위)와 연산하여 유효기간을 설정.
       date.setTime(date.getTime()+ exp * 24 * 60 * 60 * 1000);
+      // 0.001초 * 1000 = 1초 / 1초 * 60 = 1분 / 1분 * 60 = 1시간 / 1시간 * 24 = 1일
+      // 강제 설정된 유효기간을 콘솔출력. ex. 5.12일 13시(현재날짜) + 1일(유효기간) = 5.13 13시
       console.log("유효시간", date.toUTCString());
       // 쿠키생성 : 쿠키명=쿠키값; 유효기간=xx; 적용할경로==xx;
       document.cookie = name + '=' + value + ';expires=' + 
@@ -26,6 +29,7 @@
     var getCookie = function(name){
       // 1차 split으로 배열 생성
       // document.cookie는 "key1=value1; key2=value2; ..." 형식의 문자열을 반환
+      // 인코딩된 문자열로 반환되서, 디코딩을 해야 한다.
       var values = document.cookie.split(";");
       // 항목의 개수만큼 반복
       for(var i=0 ; i<values.length ; i++){
@@ -35,7 +39,8 @@
         // 매개변수로 전달된 쿠키명과 비교
         if(value[0]==name){
           // 해당 쿠키값을 반환한다.
-          return unescape(value[1]);
+          // unescape(레거시 함수) => decodeURIComponent(권장)
+          return decodeURIComponent(value[1]);
         }
       }
       return null;

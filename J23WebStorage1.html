@@ -24,6 +24,8 @@
         var visitVar1 = localStorage.getItem("visitCnt1");
         if (visitVar1 == null) {
           // 기존에 저장된 값이 없다면 새로운 스토리지를 생성한다.
+          // 여기서 visitCnt1 첫 생성. 스토리지 내부에 키값을 넣는 방식.
+          // "visitCnt1"이라는 키를 만들고, 값 "1"을 저장함.
           localStorage.setItem("visitCnt1", 1);
           span1.innerHTML = "첫방문이시네요";
         }
@@ -51,17 +53,18 @@
       else {
         content.innerHTML = "웹스토리지를 지원하지 않습니다.";
       }
-
-      // 삭제시에는 removeItem()을 실행한다.
-      function removeLocal(){
-        localStorage.removeItem("visitCnt1");
-        span1.innerHTML = "방문횟수가 초기화되었습니다.";
-      }
-      function removeSession(){
-        sessionStorage.removeItem("visitCnt2");
-        span2.innerHTML = "방문횟수가 초기화되었습니다.";
-      }
+    };
+    
+    // 삭제시에는 removeItem()을 실행한다.
+    function removeLocal(){
+      localStorage.removeItem("visitCnt1");
+      span1.innerHTML = "방문횟수가 초기화되었습니다.";
     }
+    function removeSession(){
+      sessionStorage.removeItem("visitCnt2");
+      span2.innerHTML = "방문횟수가 초기화되었습니다.";
+    }
+    
   </script>
 </head>
 <body>
